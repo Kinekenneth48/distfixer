@@ -1,5 +1,9 @@
-^README\.Rmd$
-^LICENSE\.md$
 ^.*\.Rproj$
 ^\.Rproj\.user$
+^misc$
+^LICENSE\.md$
+^explanations.txt$
 ^data-raw$
+^README\.Rmd$
+^cran-comments\.md$
+^news\.md$
