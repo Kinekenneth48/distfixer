@@ -9,6 +9,9 @@
 #'  model of class "ranger" when random forest if fitted, "ksvm"
 #'  when support vector regression is fitted, and "gbm.object" when gradient
 #'  boosting machine is fitted.
+#' @param method Machine learning model of the fitted model. This is a character class type
+#'  where "rf" - random forest, "svr" - support vector regression, and
+#'  "gbm" - gradient boosting machine.
 #' @param snowload Logical variable indicating that the final response variable
 #'  for fitting the distribution is snowload. In this case, the initial response
 #'  variable(actual/predicted) is multiplied against snow depth. Default is
@@ -30,11 +33,24 @@
 #' @rdname predict_param
 #' @export
 #' @importFrom stats rnorm quantile predict
-predict_param <- function(test_data, fitted_model, snowload = TRUE,
+predict_param <- function(test_data, fitted_model, snowload = TRUE, method,
                           snowdepth_col = snowdepth, snowload_col = snowload,
                           mean = 0, sd = 1, percentile = 0.9,
                           nboot = 200) {
-  predictions <- predict(fitted_model, test_data)
+  
+  
+  predictions <- switch(method,
+                        "rf" = {
+                          predictions = predict(fitted_model, test_data)[["predictions"]]
+                        },
+                        "svr" = {
+                          predictions = predict(fitted_model, test_data)
+                        },
+                        "gbm" = {
+                          predictions <- predict(fitted_model, test_data)
+                        },
+                        stop(paste("Unknown method:", method))
+  )
 
   lnorm_params_matrix <- boot_sample_test(
     test_data, nboot, mean, sd,

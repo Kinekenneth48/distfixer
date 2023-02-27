@@ -2,6 +2,7 @@
 
 export(best_percentile)
 export(fit_model)
+export(get_error_distribution)
 export(predict_param)
 import(utils)
 importFrom(fitdistrplus,fitdist)

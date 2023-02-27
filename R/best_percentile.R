@@ -13,9 +13,11 @@
 #'  model of class "ranger" when random forest if fitted, "ksvm"
 #'  when support vector regression is fitted, and "gbm.object" when gradient
 #'  boosting machine is fitted.
-#' @param method Machine learning model to fit. This is a character class type
+#' @param method Machine learning model of the fitted model. This is a character class type
 #'  where "rf" - random forest, "svr" - support vector regression, and
 #'  "gbm" - gradient boosting machine.
+#' @param mean Mean of model error. Distribution is normal.
+#' @param sd Standard deviation of model error. Distribution is normal.
 #' @param nboot Number of times to bootstrap the error distribution. This is an
 #'  integer type parameter. Default is 200, which creates 200 different log
 #'  normal distribution parameters.
@@ -45,33 +47,14 @@
 #' @importFrom fitdistrplus fitdist
 #' @importFrom stats rnorm quantile predict
 
-best_percentile <- function(train_data, label, fitted_model, method, nboot = 200,
+
+best_percentile <- function(train_data, label,fitted_model,method, mean = 0, sd = 1, nboot = 200,
                             snowload = TRUE, snowdepth_col = "snowdepth",
                             snowload_col = "snowload") {
-  error_distr <- switch(method,
-    "rf" = {
-      res <- train_data[[label]] - predict(fitted_model, train_data)
-      fit_norm <- fitdistrplus::fitdist(res, "norm")
-    },
-    "svr" = {
-      res <- train_data[[label]] - predict(fitted_model, train_data)
-      fit_norm <- fitdistrplus::fitdist(res, "norm")
-    },
-    "gbm" = {
-      res <- train_data[[label]] - predict(fitted_model, train_data)
-      fit_norm <- fitdistrplus::fitdist(res, "norm")
-    },
-    stop(paste("Unknown method:", method))
-  )
-
-
-
-
-  lnorm_params_matrix <- boot_sample_train(
-    train_data, error_distr, nboot,
-    label, snowload, snowdepth
-  )
-
+  
+lnorm_params_matrix <- boot_sample_train( train_data,fitted_model, method, 
+                                          mean, sd, nboot, label, 
+                                            snowload, snowdepth_col)
 
 
   # Fit a lognormal distribution to the true SWE
@@ -86,12 +69,5 @@ best_percentile <- function(train_data, label, fitted_model, method, nboot = 200
   percentile <- sum(lnorm_params_matrix[, "sdlog"] <= closest_sd) / nboot
 
 
-  return(list(
-    percentile = percentile,
-    error_distr = list(
-      distribution = error_distr$distname,
-      parameter_sd = error_distr$estimate[["mean"]],
-      parameter_sd = error_distr$estimate[["sd"]]
-    )
-  ))
+  return(percentile)
 }

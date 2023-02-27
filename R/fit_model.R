@@ -55,17 +55,20 @@ fit_model <- function(formula, data, method, label, features, cv_folds = 5) {
     }
   }
 
+  
+  
   # fit model based on model specification
   model_fit <- switch(method,
     "rf" = {
       ranger::ranger(
         formula = formula,
         data = data,
-        num.trees = 500,
+        num.trees = 200,
         mtry = 3,
         min.node.size = 5,
         importance = "impurity",
-        oob.error = TRUE
+        oob.error = TRUE,
+        num.threads = parallel::detectCores() - 2
       )
     },
     "svr" = {
@@ -86,7 +89,7 @@ fit_model <- function(formula, data, method, label, features, cv_folds = 5) {
         formula = formula,
         data = data,
         distribution = "gaussian",
-        n.trees = 500,
+        n.trees = 200,
         interaction.depth = 6,
         shrinkage = 0.01,
         bag.fraction = 0.7,

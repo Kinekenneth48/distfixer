@@ -6,7 +6,10 @@
 \usage{
 boot_sample_train(
   train_data,
-  error_distr,
+  fitted_model,
+  method,
+  mean,
+  sd,
   nboot,
   label,
   snowload,
@@ -16,7 +19,18 @@ boot_sample_train(
 \arguments{
 \item{train_data}{Training data of class data.frame.}
 
-\item{error_distr}{Fitted normal distribution of model errors.}
+\item{fitted_model}{A fitted model from the fit_model function. A fitted
+model of class "ranger" when random forest if fitted, "ksvm"
+when support vector regression is fitted, and "gbm.object" when gradient
+boosting machine is fitted.}
+
+\item{method}{Machine learning model of the fitted model. This is a character class type
+where "rf" - random forest, "svr" - support vector regression, and
+"gbm" - gradient boosting machine.}
+
+\item{mean}{Mean of model error. Distribution is normal.}
+
+\item{sd}{Standard deviation of model error. Distribution is normal.}
 
 \item{nboot}{Number of times to bootstrap the error distribution. This is an
 integer type parameter.}

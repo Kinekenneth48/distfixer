@@ -8,6 +8,7 @@ predict_param(
   test_data,
   fitted_model,
   snowload = TRUE,
+  method,
   snowdepth_col = snowdepth,
   snowload_col = snowload,
   mean = 0,
@@ -29,6 +30,10 @@ for fitting the distribution is snowload. In this case, the initial response
 variable(actual/predicted) is multiplied against snow depth. Default is
 TRUE.  When FALSE, initial response variable (snowload is not computed) for
 distribution fitting.}
+
+\item{method}{Machine learning model of the fitted model. This is a character class type
+where "rf" - random forest, "svr" - support vector regression, and
+"gbm" - gradient boosting machine.}
 
 \item{snowdepth_col}{Specify the snow depth column needed to compute the
 snowload quantity. Default: "snowdepth".}
