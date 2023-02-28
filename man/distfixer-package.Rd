@@ -4,12 +4,12 @@
 \name{distfixer-package}
 \alias{distfixer}
 \alias{distfixer-package}
-\title{distfixer: What the Package Does (One Line, Title Case)}
+\title{distfixer: Lognormal Distribution Bias Correction using Residual Bootstrap}
 \description{
-What the package does (one paragraph).
+The "distfixer" package allow the user to correct the biasness in lognormal distribution fitting when missing values are imputed using machine learning models. The package includes the "fit_model" function, to fit a machine learning model. The "get_error_distribution" to get the parameters of the error distribution. The " best_percentile" to get the best percentile that corrects the location and scale parameters. The "pred_param" to compute the unbiased lognormal distribution parameters.
 }
 \author{
-\strong{Maintainer}: Kenneth Pomeyie \email{kenneth.pomeyie@usu.edu} (\href{https://orcid.org/YOUR-ORCID-ID}{ORCID})
+\strong{Maintainer}: Kenneth Pomeyie \email{kenneth.pomeyie@usu.edu}
 
 }
 \keyword{internal}

@@ -6,10 +6,10 @@
 \usage{
 boot_sample_test(
   test_data,
-  nboot,
+  fitted_model,
   mean,
   sd,
-  predictions,
+  nboot,
   snowload,
   snowdepth_col
 )
@@ -17,16 +17,17 @@ boot_sample_test(
 \arguments{
 \item{test_data}{Test data of class data.frame.}
 
+\item{fitted_model}{A fitted model from the fit_model function. A fitted
+model of class "ranger" when random forest if fitted, "ksvm"
+when support vector regression is fitted, and "gbm.object" when gradient
+boosting machine is fitted.}
+
+\item{mean}{Mean of model error. Distribution is normal.}
+
+\item{sd}{Standard deviation of model error. Distribution is normal.}
+
 \item{nboot}{Number of times to bootstrap the error distribution. This is an
 integer type parameter.}
-
-\item{mean}{Mean of the normal distribution of fitted model errors,
-Default: 0.}
-
-\item{sd}{Standard deviation of the normal distribution of fitted model
-errors, Default: 1.}
-
-\item{predictions}{PARAM_DESCRIPTION}
 
 \item{snowload}{Logical variable indicating that the final response variable
 for fitting the distribution is snowload. In this case, the initial response

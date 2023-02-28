@@ -39,26 +39,13 @@ predict_param <- function(test_data, fitted_model, snowload = TRUE, method,
                           nboot = 200) {
   
   
-  predictions <- switch(method,
-                        "rf" = {
-                          predictions = predict(fitted_model, test_data)[["predictions"]]
-                        },
-                        "svr" = {
-                          predictions = predict(fitted_model, test_data)
-                        },
-                        "gbm" = {
-                          predictions <- predict(fitted_model, test_data)
-                        },
-                        stop(paste("Unknown method:", method))
-  )
-
+  # compute the bootstrap of parameters
   lnorm_params_matrix <- boot_sample_test(
-    test_data, nboot, mean, sd,
-    predictions, snowload, snowdepth_col
+    test_data, fitted_model, mean, sd, nboot, 
+    snowload, snowdepth_col
   )
 
-
-
+# get the unbiased parameter
   quantile_value <- quantile(lnorm_params_matrix[, 2],
     probs = percentile,
     na.rm = TRUE

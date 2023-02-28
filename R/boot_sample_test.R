@@ -6,13 +6,14 @@
 #'  the fitted model and add them to the predicted response values. The new
 #'  values are then fitted to a log normal distribution.
 #' @param test_data Test data of class data.frame.
+#' @param fitted_model A fitted model from the fit_model function. A fitted
+#'  model of class "ranger" when random forest if fitted, "ksvm"
+#'  when support vector regression is fitted, and "gbm.object" when gradient
+#'  boosting machine is fitted.
+#' @param mean Mean of model error. Distribution is normal.
+#' @param sd Standard deviation of model error. Distribution is normal.
 #' @param nboot Number of times to bootstrap the error distribution. This is an
 #'  integer type parameter.
-#' @param mean Mean of the normal distribution of fitted model errors,
-#'  Default: 0.
-#' @param sd Standard deviation of the normal distribution of fitted model
-#'  errors, Default: 1.
-#' @param predictions PARAM_DESCRIPTION
 #' @param snowload Logical variable indicating that the final response variable
 #'  for fitting the distribution is snowload. In this case, the initial response
 #'  variable(actual/predicted) is multiplied against snow depth. Default is
@@ -23,11 +24,27 @@
 #' @return A matrix of location and scale parameters based on nboot.
 #' @rdname boot_sample_test
 #' @importFrom stats sd
-boot_sample_test <- function(test_data, nboot, mean, sd,
-                             predictions, snowload, snowdepth_col) {
+boot_sample_test <- function(test_data, fitted_model, mean, sd, nboot,
+                             snowload, snowdepth_col) {
   # Initialize a matrix to store the parameters
   lnorm_params_matrix <- matrix(nrow = nboot, ncol = 2)
   colnames(lnorm_params_matrix) <- c("meanlog", "sdlog")
+
+  # get class of model
+  model_type <- class(fitted_model)
+
+  predictions <- switch(model_type,
+    "rf" = {
+      predictions <- predict(fitted_model, test_data)[["predictions"]]
+    },
+    "svr" = {
+      predictions <- predict(fitted_model, test_data)
+    },
+    "gbm" = {
+      predictions <- predict(fitted_model, test_data)
+    },
+    stop(paste("Unknown method:", model_type))
+  )
 
   for (i in 1:nboot) {
     bootstrap_samples <- rnorm(n = nrow(test_data), mean = mean, sd = sd)

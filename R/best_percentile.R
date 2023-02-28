@@ -13,9 +13,6 @@
 #'  model of class "ranger" when random forest if fitted, "ksvm"
 #'  when support vector regression is fitted, and "gbm.object" when gradient
 #'  boosting machine is fitted.
-#' @param method Machine learning model of the fitted model. This is a character class type
-#'  where "rf" - random forest, "svr" - support vector regression, and
-#'  "gbm" - gradient boosting machine.
 #' @param mean Mean of model error. Distribution is normal.
 #' @param sd Standard deviation of model error. Distribution is normal.
 #' @param nboot Number of times to bootstrap the error distribution. This is an
@@ -48,16 +45,15 @@
 #' @importFrom stats rnorm quantile predict
 
 
-best_percentile <- function(train_data, label,fitted_model,method, mean = 0, sd = 1, nboot = 200,
-                            snowload = TRUE, snowdepth_col = "snowdepth",
-                            snowload_col = "snowload") {
-  
-lnorm_params_matrix <- boot_sample_train( train_data,fitted_model, method, 
-                                          mean, sd, nboot, label, 
-                                            snowload, snowdepth_col)
+best_percentile <- function(train_data, label, fitted_model, mean = 0, sd = 1,
+                            nboot = 200, snowload = TRUE,
+                            snowdepth_col = "snowdepth", snowload_col = "snowload") {
+ 
+  # compute the bootstrap of parameters
+   lnorm_params_matrix <- boot_sample_train(
+    train_data, fitted_model, mean, sd, nboot, snowload, snowdepth_col )
 
-
-  # Fit a lognormal distribution to the true SWE
+  # Fit a log normal distribution to the true SWE
   fit_true <- fit_true(train_data, label, snowload, snowload_col)
 
   # Get the estimated standard deviation of the true data

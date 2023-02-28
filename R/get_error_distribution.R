@@ -7,9 +7,6 @@
 #'  model of class "ranger" when random forest if fitted, "ksvm"
 #'  when support vector regression is fitted, and "gbm.object" when gradient
 #'  boosting machine is fitted.
-#' @param method Machine learning model of the fitted model. This is a character class type
-#'  where "rf" - random forest, "svr" - support vector regression, and
-#'  "gbm" - gradient boosting machine.
 #' @param label Response/dependent variable name in the train_data.
 #' @return Normal distribution parameters.
 #' @seealso 
@@ -17,14 +14,19 @@
 #' @rdname get_error_distribution
 #' @export 
 #' @importFrom fitdistrplus fitdist
-get_error_distribution <- function(train_data, fitted_model, method, label ) {
-  error_distr <- switch(method,
-    "rf" = {
+get_error_distribution <- function(train_data, fitted_model,  label ) {
+  
+  #get class of model
+  model_type <- class(fitted_model)
+  
+  #estimate the distribution of the training error
+  error_distr <- switch(model_type,
+    "ranger" = {
       res <- as.numeric(train_data[[label]]) - 
         predict(fitted_model, train_data)[["predictions"]]
       fit_norm <- fitdistrplus::fitdist(res, "norm")
     },
-    "svr" = {
+    "ksvm" = {
       res <- as.numeric(train_data[[label]]) - predict(fitted_model, train_data)
       fit_norm <- fitdistrplus::fitdist(res, "norm")
     },
@@ -32,7 +34,7 @@ get_error_distribution <- function(train_data, fitted_model, method, label ) {
       res <- as.numeric(train_data[[label]]) - predict(fitted_model, train_data)
       fit_norm <- fitdistrplus::fitdist(res, "norm")
     },
-    stop(paste("Unknown method:", method))
+    stop(paste("Unknown method:", model_type))
   )
   
   return(error_dist = list(

@@ -1,10 +1,16 @@
 Package: distfixer
-Title: What the Package Does (One Line, Title Case)
+Title: Lognormal Distribution Bias Correction using Residual Bootstrap
 Version: 0.0.0.9000
 Authors@R: 
-    person("Kenneth", "Pomeyie", , "kenneth.pomeyie@usu.edu", role = c("aut", "cre"),
-           comment = c(ORCID = "YOUR-ORCID-ID"))
-Description: What the package does (one paragraph).
+    person("Kenneth", "Pomeyie", , "kenneth.pomeyie@usu.edu", 
+    role = c("aut", "cre"))
+Description: The "distfixer" package allow the user to correct the biasness
+    in lognormal distribution fitting when missing values are imputed using
+    machine learning models. The package includes the "fit_model" function, 
+    to fit a machine learning model. The "get_error_distribution" to get the 
+    parameters of the error distribution. The " best_percentile" to get the best
+    percentile that corrects the location and scale parameters. The "pred_param" 
+    to compute the unbiased lognormal distribution parameters.
 License: MIT + file LICENSE
 Encoding: UTF-8
 Imports: 

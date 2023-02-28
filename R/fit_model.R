@@ -1,7 +1,7 @@
 # =============================================================================#
 # model_fit function(external) declaration
 # =============================================================================#
-#' @title Fit machine learning models
+#' @title Fit machine learning model
 #' @description This function allows the user to fit machine learning models
 #'  which include random forest, support vector regression, and gradient boosting
 #'  machine.

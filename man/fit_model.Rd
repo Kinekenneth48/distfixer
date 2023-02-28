@@ -2,7 +2,7 @@
 % Please edit documentation in R/fit_model.R
 \name{fit_model}
 \alias{fit_model}
-\title{Fit machine learning models}
+\title{Fit machine learning model}
 \usage{
 fit_model(formula, data, method, label, features, cv_folds = 5)
 }

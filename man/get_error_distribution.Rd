@@ -4,7 +4,7 @@
 \alias{get_error_distribution}
 \title{Error distribution}
 \usage{
-get_error_distribution(train_data, fitted_model, method, label)
+get_error_distribution(train_data, fitted_model, label)
 }
 \arguments{
 \item{train_data}{Training data of class data.frame.}
@@ -13,10 +13,6 @@ get_error_distribution(train_data, fitted_model, method, label)
 model of class "ranger" when random forest if fitted, "ksvm"
 when support vector regression is fitted, and "gbm.object" when gradient
 boosting machine is fitted.}
-
-\item{method}{Machine learning model of the fitted model. This is a character class type
-where "rf" - random forest, "svr" - support vector regression, and
-"gbm" - gradient boosting machine.}
 
 \item{label}{Response/dependent variable name in the train_data.}
 }

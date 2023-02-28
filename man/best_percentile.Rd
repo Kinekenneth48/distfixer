@@ -8,7 +8,6 @@ best_percentile(
   train_data,
   label,
   fitted_model,
-  method,
   mean = 0,
   sd = 1,
   nboot = 200,
@@ -26,10 +25,6 @@ best_percentile(
 model of class "ranger" when random forest if fitted, "ksvm"
 when support vector regression is fitted, and "gbm.object" when gradient
 boosting machine is fitted.}
-
-\item{method}{Machine learning model of the fitted model. This is a character class type
-where "rf" - random forest, "svr" - support vector regression, and
-"gbm" - gradient boosting machine.}
 
 \item{mean}{Mean of model error. Distribution is normal.}
 

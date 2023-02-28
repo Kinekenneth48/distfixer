@@ -1,5 +1,5 @@
 # =============================================================================#
-# best_percentile function(internal) declaration
+# boot_sample_train function(internal) declaration
 # =============================================================================#
 #' @title Bootstrap fitted model error for train data
 #' @description This is an internal function that bootstraps the error from
@@ -10,14 +10,10 @@
 #'  model of class "ranger" when random forest if fitted, "ksvm"
 #'  when support vector regression is fitted, and "gbm.object" when gradient
 #'  boosting machine is fitted.
-#' @param method Machine learning model of the fitted model. This is a character class type
-#'  where "rf" - random forest, "svr" - support vector regression, and
-#'  "gbm" - gradient boosting machine.
 #' @param mean Mean of model error. Distribution is normal.
 #' @param sd Standard deviation of model error. Distribution is normal.
 #' @param nboot Number of times to bootstrap the error distribution. This is an
 #'  integer type parameter.
-#' @param label Response/dependent variable name in the train_data.
 #' @param snowload Logical variable indicating that the final response variable
 #'  for fitting the distribution is snowload. In this case, the initial response
 #'  variable(actual/predicted) is multiplied against snow depth. Default is
@@ -28,27 +24,29 @@
 #' @return A matrix of location and scale parameters based on nboot.
 #' @rdname boot_sample_train
 #' @importFrom stats sd
-boot_sample_train <- function(train_data,fitted_model,method, mean, sd, nboot, 
-                              label, snowload,
-                              snowdepth_col) {
+boot_sample_train <- function(train_data, fitted_model, mean, sd, nboot,
+                              snowload, snowdepth_col) {
   # Initialize a matrix to store the parameters
   lnorm_params_matrix <- matrix(nrow = nboot, ncol = 2)
   colnames(lnorm_params_matrix) <- c("meanlog", "sdlog")
 
-  
- predictions <- switch(method,
-            "rf" = {
-              predictions = predict(fitted_model, train_data)[["predictions"]]
-            },
-            "svr" = {
-              predictions = predict(fitted_model, train_data)
-            },
-            "gbm" = {
-              predictions <- predict(fitted_model, train_data)
-            },
-            stop(paste("Unknown method:", method))
+  # get class of model
+  model_type <- class(fitted_model)
+
+
+  predictions <- switch(model_type,
+    "ranger" = {
+      predictions <- predict(fitted_model, train_data)[["predictions"]]
+    },
+    "ksvm" = {
+      predictions <- predict(fitted_model, train_data)
+    },
+    "gbm" = {
+      predictions <- predict(fitted_model, train_data)
+    },
+    stop(paste("Unknown method:", model_type))
   )
- 
+
   for (i in 1:nboot) {
     bootstrap_samples <- rnorm(n = nrow(train_data), mean = mean, sd = sd)
 
@@ -73,7 +71,8 @@ boot_sample_train <- function(train_data,fitted_model,method, mean, sd, nboot,
     lnorm_model <- fitdist(
       data = as.numeric(new_y_bootstrap), distr = "lnorm",
       start = list(
-        meanlog = mean(log(new_y_bootstrap)), sdlog = stats::sd(log(new_y_bootstrap))
+        meanlog = mean(log(new_y_bootstrap)),
+        sdlog = stats::sd(log(new_y_bootstrap))
       ),
       method = "mle"
     )
