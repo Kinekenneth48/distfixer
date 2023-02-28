@@ -9,20 +9,19 @@
 #'  boosting machine is fitted.
 #' @param label Response/dependent variable name in the train_data.
 #' @return Normal distribution parameters.
-#' @seealso 
+#' @seealso
 #'  \code{\link[fitdistrplus]{fitdist}}
 #' @rdname get_error_distribution
-#' @export 
+#' @export
 #' @importFrom fitdistrplus fitdist
-get_error_distribution <- function(train_data, fitted_model,  label ) {
-  
-  #get class of model
+get_error_distribution <- function(train_data, fitted_model, label) {
+  # get class of model
   model_type <- class(fitted_model)
-  
-  #estimate the distribution of the training error
+
+  # estimate the distribution of the training error
   error_distr <- switch(model_type,
     "ranger" = {
-      res <- as.numeric(train_data[[label]]) - 
+      res <- as.numeric(train_data[[label]]) -
         predict(fitted_model, train_data)[["predictions"]]
       fit_norm <- fitdistrplus::fitdist(res, "norm")
     },
@@ -36,7 +35,7 @@ get_error_distribution <- function(train_data, fitted_model,  label ) {
     },
     stop(paste("Unknown method:", model_type))
   )
-  
+
   return(error_dist = list(
     distribution = error_distr$distname,
     parameter_mean = error_distr$estimate[["mean"]],

@@ -6,9 +6,10 @@
 \usage{
 predict_param(
   test_data,
+  label,
   fitted_model,
   snowload = TRUE,
-  method,
+  all.missing = TRUE,
   snowdepth_col = snowdepth,
   snowload_col = snowload,
   mean = 0,
@@ -19,6 +20,8 @@ predict_param(
 }
 \arguments{
 \item{test_data}{Test data of class data.frame.}
+
+\item{label}{Response/dependent variable name in the data.}
 
 \item{fitted_model}{A fitted model from the fit_model function. A fitted
 model of class "ranger" when random forest if fitted, "ksvm"
@@ -31,9 +34,7 @@ variable(actual/predicted) is multiplied against snow depth. Default is
 TRUE.  When FALSE, initial response variable (snowload is not computed) for
 distribution fitting.}
 
-\item{method}{Machine learning model of the fitted model. This is a character class type
-where "rf" - random forest, "svr" - support vector regression, and
-"gbm" - gradient boosting machine.}
+\item{all.missing}{Default: TRUE}
 
 \item{snowdepth_col}{Specify the snow depth column needed to compute the
 snowload quantity. Default: "snowdepth".}

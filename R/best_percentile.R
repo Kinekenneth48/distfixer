@@ -48,10 +48,10 @@
 best_percentile <- function(train_data, label, fitted_model, mean = 0, sd = 1,
                             nboot = 200, snowload = TRUE,
                             snowdepth_col = "snowdepth", snowload_col = "snowload") {
- 
   # compute the bootstrap of parameters
-   lnorm_params_matrix <- boot_sample_train(
-    train_data, fitted_model, mean, sd, nboot, snowload, snowdepth_col )
+  lnorm_params_matrix <- boot_sample_train(
+    train_data, fitted_model, mean, sd, nboot, snowload, snowdepth_col
+  )
 
   # Fit a log normal distribution to the true SWE
   fit_true <- fit_true(train_data, label, snowload, snowload_col)

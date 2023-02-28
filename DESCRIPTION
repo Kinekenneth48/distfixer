@@ -13,6 +13,7 @@ Description: The "distfixer" package allow the user to correct the biasness
     to compute the unbiased lognormal distribution parameters.
 License: MIT + file LICENSE
 Encoding: UTF-8
+Depends: R (>= 3.1.0)
 Imports: 
   ranger,
   kernlab,
@@ -25,5 +26,4 @@ RoxygenNote: 7.2.3
 Suggests: 
     testthat (>= 3.0.0)
 Config/testthat/edition: 3
-Depends: 
-    R (>= 2.10)
+

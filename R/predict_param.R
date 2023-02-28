@@ -5,13 +5,12 @@
 #' @description This function predicts the log normal distribution parameters of
 #'  of the response variable for a given set of predictor variables.
 #' @param test_data Test data of class data.frame.
+#' @param label Response/dependent variable name in the data.
 #' @param fitted_model A fitted model from the fit_model function. A fitted
 #'  model of class "ranger" when random forest if fitted, "ksvm"
 #'  when support vector regression is fitted, and "gbm.object" when gradient
 #'  boosting machine is fitted.
-#' @param method Machine learning model of the fitted model. This is a character class type
-#'  where "rf" - random forest, "svr" - support vector regression, and
-#'  "gbm" - gradient boosting machine.
+#' @param all.missing Default: TRUE
 #' @param snowload Logical variable indicating that the final response variable
 #'  for fitting the distribution is snowload. In this case, the initial response
 #'  variable(actual/predicted) is multiplied against snow depth. Default is
@@ -33,19 +32,25 @@
 #' @rdname predict_param
 #' @export
 #' @importFrom stats rnorm quantile predict
-predict_param <- function(test_data, fitted_model, snowload = TRUE, method,
+predict_param <- function(test_data, label, fitted_model, snowload = TRUE, all.missing = TRUE,
                           snowdepth_col = snowdepth, snowload_col = snowload,
                           mean = 0, sd = 1, percentile = 0.9,
                           nboot = 200) {
-  
-  
-  # compute the bootstrap of parameters
-  lnorm_params_matrix <- boot_sample_test(
-    test_data, fitted_model, mean, sd, nboot, 
-    snowload, snowdepth_col
-  )
+  if (all.missing) {
+    # compute the bootstrap of parameters
+    lnorm_params_matrix <- boot_sample_all_missing(
+      test_data, label, fitted_model, mean, sd, nboot,
+      snowload, snowdepth_col
+    )
+  } else {
+    lnorm_params_matrix <- boot_sample_some_missing(
+      test_data, label, fitted_model, mean, sd, nboot,
+      snowload, snowdepth_col
+    )
+  }
 
-# get the unbiased parameter
+
+  # get the unbiased parameter
   quantile_value <- quantile(lnorm_params_matrix[, 2],
     probs = percentile,
     na.rm = TRUE

@@ -55,8 +55,8 @@ fit_model <- function(formula, data, method, label, features, cv_folds = 5) {
     }
   }
 
-  
-  
+
+
   # fit model based on model specification
   model_fit <- switch(method,
     "rf" = {

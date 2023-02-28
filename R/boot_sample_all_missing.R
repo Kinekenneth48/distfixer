@@ -1,11 +1,12 @@
 # =============================================================================#
-# boot_sample_test function(internal) declaration
+# boot_sample_all_missing function(internal) declaration
 # =============================================================================#
 #' @title Bootstrap fitted model error for test data
 #' @description This is an internal function that bootstraps the error from
 #'  the fitted model and add them to the predicted response values. The new
 #'  values are then fitted to a log normal distribution.
 #' @param test_data Test data of class data.frame.
+#' @param label Response/dependent variable name in the data.
 #' @param fitted_model A fitted model from the fit_model function. A fitted
 #'  model of class "ranger" when random forest if fitted, "ksvm"
 #'  when support vector regression is fitted, and "gbm.object" when gradient
@@ -22,10 +23,10 @@
 #' @param snowdepth_col Specify the snow depth column needed to compute the
 #'  snowload quantity. Default: "snowdepth".
 #' @return A matrix of location and scale parameters based on nboot.
-#' @rdname boot_sample_test
+#' @rdname boot_sample_all_missing
 #' @importFrom stats sd
-boot_sample_test <- function(test_data, fitted_model, mean, sd, nboot,
-                             snowload, snowdepth_col) {
+boot_sample_all_missing <- function(test_data, label, fitted_model, mean, sd, nboot,
+                                    snowload, snowdepth_col) {
   # Initialize a matrix to store the parameters
   lnorm_params_matrix <- matrix(nrow = nboot, ncol = 2)
   colnames(lnorm_params_matrix) <- c("meanlog", "sdlog")
