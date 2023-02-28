@@ -1,3 +1,6 @@
 ## code to prepare `DATASET` dataset goes here
 
-usethis::use_data(DATASET, overwrite = TRUE)
+
+load("/tests/testdata/model.RData")
+load("/tests/testdata/data.RData")
+usethis::use_data(data, model, overwrite = TRUE, internal = TRUE)
