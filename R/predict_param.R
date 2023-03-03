@@ -1,16 +1,17 @@
 # =============================================================================#
 # predict_param function(external) declaration
 # =============================================================================#
-#' @title Predict log normal distribution parameters
-#' @description This function predicts the log normal distribution parameters of
-#'  of the response variable for a given set of predictor variables.
+#' @title Predict unbiased log normal distribution parameters
+#' @description This function predicts an unbiased  log normal distribution
+#' parameters of the response variable for a given set of predictor variables.
 #' @param test_data Test data of class data.frame.
 #' @param label Response/dependent variable name in the data.
 #' @param fitted_model A fitted model from the fit_model function. A fitted
 #'  model of class "ranger" when random forest if fitted, "ksvm"
 #'  when support vector regression is fitted, and "gbm.object" when gradient
 #'  boosting machine is fitted.
-#' @param all.missing Default: TRUE
+#' @param all.missing Logical variable indicating whether the all or some
+#' of the reponse variable is missing. Default: TRUE
 #' @param snowload Logical variable indicating that the final response variable
 #'  for fitting the distribution is snowload. In this case, the initial response
 #'  variable(actual/predicted) is multiplied against snow depth. Default is
@@ -20,10 +21,9 @@
 #'  snowload quantity. Default: "snowdepth".
 #' @param snowload_col Specify the snowload column name needed for computing
 #'  the true parameter values. Default: "snowload".
-#' @param mean Mean of the normal distribution of fitted model errors,
-#'  Default: 0.
-#' @param sd Standard deviation of the normal distribution of fitted model
-#'  errors, Default: 1.
+#' @param mean Mean of the error distribution. Distribution is normal.
+#' @param sd Standard deviation of the error distribution. Distribution
+#' is normal.
 #' @param percentile Percentile of  bootstrap distribution parameter to get,
 #' Default: 0.9.
 #' @param nboot Number of bootstraps to run before getting the distribution

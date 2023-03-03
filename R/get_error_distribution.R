@@ -10,7 +10,7 @@
 #' @param label Response/dependent variable name in the train_data.
 #' @return Normal distribution parameters.
 #' @seealso
-#'  \code{\link[fitdistrplus]{fitdist}}
+#' [fitdistrplus::fitdist()], [distfixer::fit_model()].
 #' @rdname get_error_distribution
 #' @export
 #' @importFrom fitdistrplus fitdist

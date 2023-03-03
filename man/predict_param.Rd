@@ -2,7 +2,7 @@
 % Please edit documentation in R/predict_param.R
 \name{predict_param}
 \alias{predict_param}
-\title{Predict log normal distribution parameters}
+\title{Predict unbiased log normal distribution parameters}
 \usage{
 predict_param(
   test_data,
@@ -34,7 +34,8 @@ variable(actual/predicted) is multiplied against snow depth. Default is
 TRUE.  When FALSE, initial response variable (snowload is not computed) for
 distribution fitting.}
 
-\item{all.missing}{Default: TRUE}
+\item{all.missing}{Logical variable indicating whether the all or some
+of the reponse variable is missing. Default: TRUE}
 
 \item{snowdepth_col}{Specify the snow depth column needed to compute the
 snowload quantity. Default: "snowdepth".}
@@ -42,11 +43,10 @@ snowload quantity. Default: "snowdepth".}
 \item{snowload_col}{Specify the snowload column name needed for computing
 the true parameter values. Default: "snowload".}
 
-\item{mean}{Mean of the normal distribution of fitted model errors,
-Default: 0.}
+\item{mean}{Mean of the error distribution. Distribution is normal.}
 
-\item{sd}{Standard deviation of the normal distribution of fitted model
-errors, Default: 1.}
+\item{sd}{Standard deviation of the error distribution. Distribution
+is normal.}
 
 \item{percentile}{Percentile of  bootstrap distribution parameter to get,
 Default: 0.9.}
@@ -58,6 +58,6 @@ parameters, Default: 200.}
 Log normal distribution parameters.
 }
 \description{
-This function predicts the log normal distribution parameters of
-of the response variable for a given set of predictor variables.
+This function predicts an unbiased  log normal distribution
+parameters of the response variable for a given set of predictor variables.
 }

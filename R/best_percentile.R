@@ -4,7 +4,7 @@
 #' @title Best Percentile
 #' @description This function finds the best percentile out of the bootstraps of
 #'  scale parameters that minimizes the distance between the true and predicted
-#'  scale parameter. The bootstrap of log normal distribution parameters are
+#'  scale parameters. The bootstrap of log normal distribution parameters are
 #'  created by bootstrapping the error distribution from the fitted model and
 #'  adding it to the predict response variable.
 #' @param train_data Training data of class data.frame.
@@ -13,32 +13,44 @@
 #'  model of class "ranger" when random forest if fitted, "ksvm"
 #'  when support vector regression is fitted, and "gbm.object" when gradient
 #'  boosting machine is fitted.
-#' @param mean Mean of model error. Distribution is normal.
-#' @param sd Standard deviation of model error. Distribution is normal.
+#' @param mean Mean of the error distribution. Distribution is normal.
+#' @param sd Standard deviation of the error distribution. Distribution
+#' is normal.
 #' @param nboot Number of times to bootstrap the error distribution. This is an
 #'  integer type parameter. Default is 200, which creates 200 different log
 #'  normal distribution parameters.
 #' @param snowload Logical variable indicating that the final response variable
 #'  for fitting the distribution is snowload. In this case, the initial response
-#'  variable(actual/predicted) is multiplied against snow depth. Default is
+#'  variable(actual/predicted) is multiplied against the snow depth. Default is
 #'  TRUE.  When FALSE, initial response variable (snowload is not computed) for
 #'  distribution fitting.
 #' @param snowdepth_col Specify the snow depth column needed to compute the
 #'  snowload quantity. Default: "snowdepth".
 #' @param snowload_col Specify the snowload column name needed for computing
 #'  the true parameter values. Default: "snowload".
-#' @return A value the represents the percentile gets the bootstrap of
+#' @return A value the represents the percentile of the bootstraps that gets the
 #'  predicted scale parameter close to the true parameter.
-#'
-#' @details DETAILS
 #' @examples
 #' \dontrun{
 #' if (interactive()) {
-#'   # EXAMPLE1
+#'   # generate data for modelfitting
+#'   data <- data.frame(x1 = rnorm(100), x2 = rnorm(100), y = rnorm(100))
+#'
+#'   # fit a gradient boosting machine to data
+#'   model <- fit_model(
+#'     data = data, method = "gbm", label = "y",
+#'     features = c("x1", "x2")
+#'   )
+#'
+#'   # find the best percentile that corrects the biasness in the distr. fitting
+#'   best_percentile(
+#'     train_data = data, label = "y", fitted_model = model,
+#'     snowload = FALSE
+#'   )
 #' }
 #' }
 #' @seealso
-#'  \code{\link[fitdistrplus]{fitdist}}
+#' [fitdistrplus::fitdist()], [distfixer::fit_model()] .
 #' @rdname best_percentile
 #' @export
 #' @importFrom fitdistrplus fitdist

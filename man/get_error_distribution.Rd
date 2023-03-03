@@ -24,5 +24,5 @@ This function fits the residuals of the training data to a
 normal distribution and returns the distribution parameters.
 }
 \seealso{
-\code{\link[fitdistrplus]{fitdist}}
+\code{\link[fitdistrplus:fitdist]{fitdistrplus::fitdist()}}, \code{\link[=fit_model]{fit_model()}}.
 }

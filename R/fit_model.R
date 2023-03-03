@@ -2,7 +2,7 @@
 # model_fit function(external) declaration
 # =============================================================================#
 #' @title Fit machine learning model
-#' @description This function allows the user to fit machine learning models
+#' @description This function allows the user to fit a machine learning model
 #'  which include random forest, support vector regression, and gradient boosting
 #'  machine.
 #' @param formula Object of class character describing the model to fit.
@@ -15,11 +15,14 @@
 #' @param features Predictor variables, alternative interface to data with
 #'  formula approach.
 #' @param cv_folds A k-fold cross validation on the training data, Default: 5.
-#'  This is an integer type parameter.
+#'  This is an integer type parameter that apply to "svr" -
+#'   support vector regression, and "gbm" - gradient boosting machine.
+#' @param ... other parameters to pass to the model fitting function
+#' "ranger::ranger" for random forest, "kernlab::ksvm" for support vector
+#' regression, and "gbm::gbm" for gradient boosting machine.
 #' @return A fitted model of class "ranger" when random forest if fitted, "ksvm"
 #'  when support vector regression is fitted, and "gbm.object" when gradient
 #'  boosting machine is fitted.
-#' @details DETAILS
 #' @examples
 #' \dontrun{
 #' if (interactive()) {
@@ -40,7 +43,7 @@
 #' @importFrom kernlab ksvm
 #' @importFrom parallel detectCores
 #' @importFrom gbm gbm
-fit_model <- function(formula, data, method, label, features, cv_folds = 5) {
+fit_model <- function(formula, data, method, label, features, cv_folds = 5, ...) {
   # Extract the label and feature names from the formula or arguments
   if (missing(formula)) {
     if (missing(label) || missing(features)) {

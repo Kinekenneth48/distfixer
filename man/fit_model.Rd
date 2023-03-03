@@ -4,7 +4,7 @@
 \alias{fit_model}
 \title{Fit machine learning model}
 \usage{
-fit_model(formula, data, method, label, features, cv_folds = 5)
+fit_model(formula, data, method, label, features, cv_folds = 5, ...)
 }
 \arguments{
 \item{formula}{Object of class character describing the model to fit.}
@@ -22,7 +22,12 @@ formula approach.}
 formula approach.}
 
 \item{cv_folds}{A k-fold cross validation on the training data, Default: 5.
-This is an integer type parameter.}
+This is an integer type parameter that apply to "svr" -
+support vector regression, and "gbm" - gradient boosting machine.}
+
+\item{...}{other parameters to pass to the model fitting function
+"ranger::ranger" for random forest, "kernlab::ksvm" for support vector
+regression, and "gbm::gbm" for gradient boosting machine.}
 }
 \value{
 A fitted model of class "ranger" when random forest if fitted, "ksvm"
@@ -30,12 +35,9 @@ when support vector regression is fitted, and "gbm.object" when gradient
 boosting machine is fitted.
 }
 \description{
-This function allows the user to fit machine learning models
+This function allows the user to fit a machine learning model
 which include random forest, support vector regression, and gradient boosting
 machine.
-}
-\details{
-DETAILS
 }
 \examples{
 \dontrun{

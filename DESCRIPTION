@@ -9,8 +9,8 @@ Description: The "distfixer" package allow the user to correct the biasness
     machine learning models. The package includes the "fit_model" function, 
     to fit a machine learning model. The "get_error_distribution" to get the 
     parameters of the error distribution. The " best_percentile" to get the best
-    percentile that corrects the location and scale parameters. The "pred_param" 
-    to compute the unbiased lognormal distribution parameters.
+    percentile that corrects the biasness in the location and scale parameters.
+    The "pred_param" to compute the unbiased lognormal distribution parameters.
 License: MIT + file LICENSE
 Encoding: UTF-8
 Depends: R (>= 3.1.0)

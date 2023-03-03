@@ -26,9 +26,10 @@ model of class "ranger" when random forest if fitted, "ksvm"
 when support vector regression is fitted, and "gbm.object" when gradient
 boosting machine is fitted.}
 
-\item{mean}{Mean of model error. Distribution is normal.}
+\item{mean}{Mean of the error distribution. Distribution is normal.}
 
-\item{sd}{Standard deviation of model error. Distribution is normal.}
+\item{sd}{Standard deviation of the error distribution. Distribution
+is normal.}
 
 \item{nboot}{Number of times to bootstrap the error distribution. This is an
 integer type parameter. Default is 200, which creates 200 different log
@@ -36,7 +37,7 @@ normal distribution parameters.}
 
 \item{snowload}{Logical variable indicating that the final response variable
 for fitting the distribution is snowload. In this case, the initial response
-variable(actual/predicted) is multiplied against snow depth. Default is
+variable(actual/predicted) is multiplied against the snow depth. Default is
 TRUE.  When FALSE, initial response variable (snowload is not computed) for
 distribution fitting.}
 
@@ -47,26 +48,36 @@ snowload quantity. Default: "snowdepth".}
 the true parameter values. Default: "snowload".}
 }
 \value{
-A value the represents the percentile gets the bootstrap of
+A value the represents the percentile of the bootstraps that gets the
 predicted scale parameter close to the true parameter.
 }
 \description{
 This function finds the best percentile out of the bootstraps of
 scale parameters that minimizes the distance between the true and predicted
-scale parameter. The bootstrap of log normal distribution parameters are
+scale parameters. The bootstrap of log normal distribution parameters are
 created by bootstrapping the error distribution from the fitted model and
 adding it to the predict response variable.
-}
-\details{
-DETAILS
 }
 \examples{
 \dontrun{
 if (interactive()) {
-  # EXAMPLE1
+  # generate data for modelfitting
+  data <- data.frame(x1 = rnorm(100), x2 = rnorm(100), y = rnorm(100))
+
+  # fit a gradient boosting machine to data
+  model <- fit_model(
+    data = data, method = "gbm", label = "y",
+    features = c("x1", "x2")
+  )
+
+  # find the best percentile that corrects the biasness in the distr. fitting
+  best_percentile(
+    train_data = data, label = "y", fitted_model = model,
+    snowload = FALSE
+  )
 }
 }
 }
 \seealso{
-\code{\link[fitdistrplus]{fitdist}}
+\code{\link[fitdistrplus:fitdist]{fitdistrplus::fitdist()}}, \code{\link[=fit_model]{fit_model()}} .
 }

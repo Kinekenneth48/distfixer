@@ -25,8 +25,8 @@
 #' @return A matrix of location and scale parameters based on nboot.
 #' @rdname boot_sample_some_missing
 #' @importFrom stats sd
-boot_sample_some_missing <- function(test_data, label, fitted_model, mean, sd, nboot,
-                                     snowload, snowdepth_col) {
+boot_sample_some_missing <- function(test_data, label, fitted_model, mean, sd,
+                                     nboot, snowload, snowdepth_col) {
   # Initialize a matrix to store the parameters
   lnorm_params_matrix <- matrix(nrow = nboot, ncol = 2)
   colnames(lnorm_params_matrix) <- c("meanlog", "sdlog")
