@@ -4,7 +4,7 @@
 \alias{get_error_distribution}
 \title{Error distribution}
 \usage{
-get_error_distribution(train_data, fitted_model, label)
+get_error_distribution(train_data, fitted_model, distr = "norm", label, ...)
 }
 \arguments{
 \item{train_data}{Training data of class data.frame.}
@@ -14,10 +14,18 @@ model of class "ranger" when random forest if fitted, "ksvm"
 when support vector regression is fitted, and "gbm.object" when gradient
 boosting machine is fitted.}
 
+\item{distr}{A character string that represent the distribution to fit.
+Default is "norm" for normal distribution. See fitdistrplus::fitdist for
+string names for other distributions.}
+
 \item{label}{Response/dependent variable name in the train_data.}
+
+\item{...}{Other arguments to send to the distribution functions
+fitdistrplus::fitdist}
 }
 \value{
-Normal distribution parameters.
+An object of class "fitdist", which includes the distribution names
+and parameter estimates.
 }
 \description{
 This function fits the residuals of the training data to a
