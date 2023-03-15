@@ -6,24 +6,27 @@
 \usage{
 boot_sample_all_missing(
   test_data,
-  label,
   fitted_model,
+  distr,
   mean,
   sd,
   nboot,
-  snowload,
-  snowdepth_col
+  label_convert,
+  multiplier,
+  ...
 )
 }
 \arguments{
 \item{test_data}{Test data of class data.frame.}
 
-\item{label}{Response/dependent variable name in the data.}
-
 \item{fitted_model}{A fitted model from the fit_model function. A fitted
 model of class "ranger" when random forest if fitted, "ksvm"
 when support vector regression is fitted, and "gbm.object" when gradient
 boosting machine is fitted.}
+
+\item{distr}{A character string that represent the distribution to fit for
+the label/response. Default is "lnorm" for normal distribution.
+See fitdistrplus::fitdist for string names for other distributions.}
 
 \item{mean}{Mean of model error. Distribution is normal.}
 
@@ -32,17 +35,21 @@ boosting machine is fitted.}
 \item{nboot}{Number of times to bootstrap the error distribution. This is an
 integer type parameter.}
 
-\item{snowload}{Logical variable indicating that the final response variable
-for fitting the distribution is snowload. In this case, the initial response
-variable(actual/predicted) is multiplied against snow depth. Default is
-TRUE.  When FALSE, initial response variable (snowload is not computed) for
-distribution fitting.}
+\item{label_convert}{Logical variable indicating that the final
+response/label variable for fitting the distribution should be changed
+from direct_label to the indirect_label. Default is FALSE, where the
+direct_label is considered. If TRUE, the predicted values from the
+fitted model must be multiplied by the "multiplier" to get the estimated
+indirect_label.}
 
-\item{snowdepth_col}{Specify the snow depth column needed to compute the
-snowload quantity. Default: "snowdepth".}
+\item{multiplier}{Specify the multiplier column needed to compute the
+indirect_label quantity. Default: "snowdepth".}
+
+\item{...}{Other arguments to send to the distribution function
+fitdistrplus::fitdist}
 }
 \value{
-A matrix of location and scale parameters based on nboot.
+A matrix of parameters based on nboot.
 }
 \description{
 This is an internal function that bootstraps the error from

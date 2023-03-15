@@ -20,7 +20,7 @@ string names for other distributions.}
 
 \item{label}{Response/dependent variable name in the train_data.}
 
-\item{...}{Other arguments to send to the distribution functions
+\item{...}{Other arguments to send to the distribution function
 fitdistrplus::fitdist}
 }
 \value{

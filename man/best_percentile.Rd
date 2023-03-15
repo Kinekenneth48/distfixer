@@ -6,20 +6,24 @@
 \usage{
 best_percentile(
   train_data,
-  label,
+  direct_label,
   fitted_model,
   mean = 0,
   sd = 1,
   nboot = 200,
-  snowload = TRUE,
-  snowdepth_col = "snowdepth",
-  snowload_col = "snowload"
+  distr = "lnorm",
+  param_adjust = "sdlog",
+  label_convert = FALSE,
+  multiplier = "snowdepth",
+  indirect_label = "snowload",
+  ...
 )
 }
 \arguments{
 \item{train_data}{Training data of class data.frame.}
 
-\item{label}{Response/dependent variable name in the train_data.}
+\item{direct_label}{Response/dependent/label variable name that is
+predicted by the fitted model.}
 
 \item{fitted_model}{A fitted model from the fit_model function. A fitted
 model of class "ranger" when random forest if fitted, "ksvm"
@@ -35,17 +39,30 @@ is normal.}
 integer type parameter. Default is 200, which creates 200 different log
 normal distribution parameters.}
 
-\item{snowload}{Logical variable indicating that the final response variable
-for fitting the distribution is snowload. In this case, the initial response
-variable(actual/predicted) is multiplied against the snow depth. Default is
-TRUE.  When FALSE, initial response variable (snowload is not computed) for
-distribution fitting.}
+\item{distr}{A character string that represent the distribution to fit for
+the label/response. Default is "lnorm" for normal distribution.
+See fitdistrplus::fitdist for string names for other distributions.}
 
-\item{snowdepth_col}{Specify the snow depth column needed to compute the
-snowload quantity. Default: "snowdepth".}
+\item{param_adjust}{A character string that represent the distribution
+parameter that needs adjustment. Default is "sdlog" from the log normal
+distribution. See fitdistrplus::fitdist for string
+names for other distribution parameters.}
 
-\item{snowload_col}{Specify the snowload column name needed for computing
-the true parameter values. Default: "snowload".}
+\item{label_convert}{Logical variable indicating that the final
+response/label variable for fitting the distribution should be changed
+from direct_label to the indirect_label. Default is FALSE, where the
+direct_label is considered. If TRUE, the predicted values from the
+fitted model must be multiplied by the "multiplier" to get the estimated
+indirect_label.}
+
+\item{multiplier}{Specify the multiplier column needed to compute the
+indirect_label quantity. Default: "snowdepth".}
+
+\item{indirect_label}{Specify the actual indirect_label column name needed
+for computing the true parameter values. Default: "snowload".}
+
+\item{...}{Other arguments to send to the distribution function
+fitdistrplus::fitdist}
 }
 \value{
 A value the represents the percentile of the bootstraps that gets the
@@ -72,8 +89,8 @@ if (interactive()) {
 
   # find the best percentile that corrects the biasness in the distr. fitting
   best_percentile(
-    train_data = data, label = "y", fitted_model = model,
-    snowload = FALSE
+    train_data = data, direct_label = "y", fitted_model = model,
+    label_convert = FALSE
   )
 }
 }

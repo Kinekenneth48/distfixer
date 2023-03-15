@@ -6,42 +6,56 @@
 \usage{
 predict_param(
   test_data,
-  label,
+  direct_label,
   fitted_model,
-  snowload = TRUE,
+  distr = "lnorm",
+  label_convert = FALSE,
   all.missing = TRUE,
-  snowdepth_col = snowdepth,
-  snowload_col = snowload,
+  multiplier = "snowdepth",
+  indirect_label = "snowload",
+  param_adjust = "sdlog",
   mean = 0,
   sd = 1,
   percentile = 0.9,
-  nboot = 200
+  nboot = 200,
+  ...
 )
 }
 \arguments{
 \item{test_data}{Test data of class data.frame.}
 
-\item{label}{Response/dependent variable name in the data.}
+\item{direct_label}{Response/dependent/label variable name that is
+predicted by the fitted model.}
 
 \item{fitted_model}{A fitted model from the fit_model function. A fitted
 model of class "ranger" when random forest if fitted, "ksvm"
 when support vector regression is fitted, and "gbm.object" when gradient
 boosting machine is fitted.}
 
-\item{snowload}{Logical variable indicating that the final response variable
-for fitting the distribution is snowload. In this case, the initial response
-variable(actual/predicted) is multiplied against snow depth. Default is
-TRUE.  When FALSE, initial response variable (snowload is not computed) for
-distribution fitting.}
+\item{distr}{A character string that represent the distribution to fit for
+the label/response. Default is "lnorm" for normal distribution.
+See fitdistrplus::fitdist for string names for other distributions.}
+
+\item{label_convert}{Logical variable indicating that the final
+response/label variable for fitting the distribution should be changed
+from direct_label to the indirect_label. Default is FALSE, where the
+direct_label is considered. If TRUE, the predicted values from the
+fitted model must be multiplied by the "multiplier" to get the estimated
+indirect_label.}
 
 \item{all.missing}{Logical variable indicating whether the all or some
-of the reponse variable is missing. Default: TRUE}
+of the response variable is missing. Default: TRUE}
 
-\item{snowdepth_col}{Specify the snow depth column needed to compute the
-snowload quantity. Default: "snowdepth".}
+\item{multiplier}{Specify the multiplier column needed to compute the
+indirect_label quantity. Default: "snowdepth".}
 
-\item{snowload_col}{Specify the snowload column name needed for computing
-the true parameter values. Default: "snowload".}
+\item{indirect_label}{Specify the actual indirect_label column name needed
+for computing the true parameter values. Default: "snowload".}
+
+\item{param_adjust}{A character string that represent the distribution
+parameter that needs adjustment. Default is "sdlog" from the log normal
+distribution. See fitdistrplus::fitdist for string
+names for other distribution parameters.}
 
 \item{mean}{Mean of the error distribution. Distribution is normal.}
 
@@ -53,6 +67,9 @@ Default: 0.9.}
 
 \item{nboot}{Number of bootstraps to run before getting the distribution
 parameters, Default: 200.}
+
+\item{...}{Other arguments to send to the distribution function
+fitdistrplus::fitdist}
 }
 \value{
 Log normal distribution parameters.

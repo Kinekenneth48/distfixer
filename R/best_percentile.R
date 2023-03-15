@@ -8,7 +8,8 @@
 #'  created by bootstrapping the error distribution from the fitted model and
 #'  adding it to the predict response variable.
 #' @param train_data Training data of class data.frame.
-#' @param label Response/dependent variable name in the train_data.
+#' @param direct_label Response/dependent/label variable name that is
+#' predicted by the fitted model.
 #' @param fitted_model A fitted model from the fit_model function. A fitted
 #'  model of class "ranger" when random forest if fitted, "ksvm"
 #'  when support vector regression is fitted, and "gbm.object" when gradient
@@ -19,15 +20,25 @@
 #' @param nboot Number of times to bootstrap the error distribution. This is an
 #'  integer type parameter. Default is 200, which creates 200 different log
 #'  normal distribution parameters.
-#' @param snowload Logical variable indicating that the final response variable
-#'  for fitting the distribution is snowload. In this case, the initial response
-#'  variable(actual/predicted) is multiplied against the snow depth. Default is
-#'  TRUE.  When FALSE, initial response variable (snowload is not computed) for
-#'  distribution fitting.
-#' @param snowdepth_col Specify the snow depth column needed to compute the
-#'  snowload quantity. Default: "snowdepth".
-#' @param snowload_col Specify the snowload column name needed for computing
-#'  the true parameter values. Default: "snowload".
+#' @param distr A character string that represent the distribution to fit for
+#'  the label/response. Default is "lnorm" for normal distribution.
+#'  See fitdistrplus::fitdist for string names for other distributions.
+#' @param param_adjust A character string that represent the distribution
+#' parameter that needs adjustment. Default is "sdlog" from the log normal
+#' distribution. See fitdistrplus::fitdist for string
+#' names for other distribution parameters.
+#' @param label_convert Logical variable indicating that the final
+#' response/label variable for fitting the distribution should be changed
+#' from direct_label to the indirect_label. Default is FALSE, where the
+#' direct_label is considered. If TRUE, the predicted values from the
+#' fitted model must be multiplied by the "multiplier" to get the estimated
+#' indirect_label.
+#' @param multiplier Specify the multiplier column needed to compute the
+#'  indirect_label quantity. Default: "snowdepth".
+#' @param indirect_label Specify the actual indirect_label column name needed
+#' for computing the true parameter values. Default: "snowload".
+#' @param ... Other arguments to send to the distribution function
+#'  fitdistrplus::fitdist
 #' @return A value the represents the percentile of the bootstraps that gets the
 #'  predicted scale parameter close to the true parameter.
 #' @examples
@@ -44,8 +55,8 @@
 #'
 #'   # find the best percentile that corrects the biasness in the distr. fitting
 #'   best_percentile(
-#'     train_data = data, label = "y", fitted_model = model,
-#'     snowload = FALSE
+#'     train_data = data, direct_label = "y", fitted_model = model,
+#'     label_convert = FALSE
 #'   )
 #' }
 #' }
@@ -57,24 +68,35 @@
 #' @importFrom stats rnorm quantile predict
 
 
-best_percentile <- function(train_data, label, fitted_model, mean = 0, sd = 1,
-                            nboot = 200, snowload = TRUE,
-                            snowdepth_col = "snowdepth", snowload_col = "snowload") {
-  # compute the bootstrap of parameters
-  lnorm_params_matrix <- boot_sample_train(
-    train_data, fitted_model, mean, sd, nboot, snowload, snowdepth_col
+best_percentile <- function(train_data, direct_label, fitted_model, mean = 0,
+                            sd = 1, nboot = 200, distr = "lnorm",
+                            param_adjust = "sdlog", label_convert = FALSE,
+                            multiplier = "snowdepth",
+                            indirect_label = "snowload", ...) {
+ 
+
+  # Fit the specified distribution to the true label
+  fit_true <- fit_true(
+    train_data, distr, direct_label, label_convert,
+    indirect_label
   )
 
-  # Fit a log normal distribution to the true SWE
-  fit_true <- fit_true(train_data, label, snowload, snowload_col)
+  # Get the estimated param_adjust of the true data
+  param_adjust_true <- fit_true$estimate[[param_adjust]]
 
-  # Get the estimated standard deviation of the true data
-  sd_true <- fit_true$estimate[["sdlog"]]
-
-  # Find the percentile of the sdlog that is closest to sd_true
-  closest_sd_index <- which.min(abs(lnorm_params_matrix[, "sdlog"] - sd_true))
-  closest_sd <- lnorm_params_matrix[closest_sd_index, "sdlog"]
-  percentile <- sum(lnorm_params_matrix[, "sdlog"] <= closest_sd) / nboot
+  # compute the bootstrap of parameters
+  params_matrix <- boot_sample_train(
+    train_data, fitted_model, distr, mean, sd, nboot, label_convert, multiplier,
+    fit_true
+  )
+  
+  # Find the percentile of the param_adjust that's closest to param_adjust_true
+  closest_param_index <- which.min(abs(params_matrix[, param_adjust] - 
+                                         param_adjust_true))
+  
+  closest_param <- params_matrix[closest_param_index, param_adjust]
+  
+  percentile <- sum(params_matrix[, param_adjust] <= closest_param) / nboot
 
 
   return(percentile)

@@ -4,21 +4,30 @@
 \alias{fit_true}
 \title{Fit true distribution}
 \usage{
-fit_true(train_data, label, snowload, snowload_col)
+fit_true(train_data, distr, direct_label, label_convert, indirect_label, ...)
 }
 \arguments{
 \item{train_data}{Training data of class data.frame.}
 
-\item{label}{Response/dependent variable name in the train_data.}
+\item{distr}{A character string that represent the distribution to fit for
+the label/response. Default is "lnorm" for normal distribution.
+See fitdistrplus::fitdist for string names for other distributions.}
 
-\item{snowload}{Logical variable indicating that the final response variable
-for fitting the distribution is snowload. In this case, the initial response
-variable(actual/predicted) is multiplied against snow depth. Default is
-TRUE.  When FALSE, initial response variable (snowload is not computed) for
-distribution fitting.}
+\item{direct_label}{Response/dependent/label variable name that is
+predicted by the fitted model.}
 
-\item{snowload_col}{Specify the snowload column name needed for computing
-the true parameter values. Default: "snowload"}
+\item{label_convert}{Logical variable indicating that the final
+response/label variable for fitting the distribution should be changed
+from direct_label to the indirect_label. Default is FALSE, where the
+direct_label is considered. If TRUE, the predicted values from the
+fitted model must be multiplied by the "multiplier" to get the estimated
+indirect_label.}
+
+\item{indirect_label}{Specify the actual indirect_label column name needed
+for computing the true parameter values. Default: "snowload".}
+
+\item{...}{Other arguments to send to the distribution function.
+fitdistrplus::fitdist}
 }
 \value{
 Fitted distribution object

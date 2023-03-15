@@ -11,7 +11,7 @@
 #' Default is "norm" for normal distribution. See fitdistrplus::fitdist for 
 #' string names for other distributions. 
 #' @param label Response/dependent variable name in the train_data.
-#' @param ... Other arguments to send to the distribution functions
+#' @param ... Other arguments to send to the distribution function
 #'  fitdistrplus::fitdist
 #' @return An object of class "fitdist", which includes the distribution names
 #'  and parameter estimates.

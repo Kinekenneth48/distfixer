@@ -1,4 +1,4 @@
 #' @import utils
 utils::globalVariables(c(
-  "snowdepth", "snowload", "predict"
+  "snowdepth", "snowload", "predict", "..."
 ))
