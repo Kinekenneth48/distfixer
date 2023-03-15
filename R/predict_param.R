@@ -44,20 +44,20 @@
 #' @export
 #' @importFrom stats rnorm quantile predict
 predict_param <- function(test_data, direct_label, fitted_model, distr = "lnorm",
-                          label_convert = FALSE,   all.missing = TRUE,
+                          label_convert = FALSE, all.missing = TRUE,
                           multiplier = "snowdepth", indirect_label = "snowload",
                           param_adjust = "sdlog",
                           mean = 0, sd = 1, percentile = 0.9,
-                          nboot = 200,...) {
+                          nboot = 200, ...) {
   if (all.missing) {
     # compute the bootstrap of parameters
     params_matrix <- boot_sample_all_missing(
-      test_data, fitted_model, distr, mean, sd, nboot,label_convert, multiplier
+      test_data, fitted_model, distr, mean, sd, nboot, label_convert, multiplier
     )
   } else {
     params_matrix <- boot_sample_some_missing(
-      test_data, direct_label, indirect_label, fitted_model, mean, sd,distr,
-      nboot,label_convert, multiplier
+      test_data, direct_label, indirect_label, fitted_model, mean, sd, distr,
+      nboot, label_convert, multiplier
     )
   }
 

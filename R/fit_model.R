@@ -19,7 +19,7 @@
 #'   support vector regression, and "gbm" - gradient boosting machine.
 #' @param ... other parameters to pass to the model fitting function
 #' "ranger::ranger" for random forest, "kernlab::ksvm" for support vector
-#' regression, and "gbm::gbm" for gradient boosting machine. Tuned 
+#' regression, and "gbm::gbm" for gradient boosting machine. Tuned
 #' hyper-parameters can be passed here to override default parameters.
 #' @return A fitted model of class "ranger" when random forest if fitted, "ksvm"
 #'  when support vector regression is fitted, and "gbm.object" when gradient
@@ -44,13 +44,17 @@
 #' @importFrom kernlab ksvm
 #' @importFrom parallel detectCores
 #' @importFrom gbm gbm
-fit_model <- function(formula, data, method, label, features, cv_folds = 5, ...) {
+fit_model <- function(formula, data, method, label, features, cv_folds = 5,
+                      ...) {
   # Extract the label and feature names from the formula or arguments
   if (missing(formula)) {
     if (missing(label) || missing(features)) {
-      stop("Both label and features must be provided when formula is not provided.")
+      stop("Both label and features must be provided when formula
+           is not provided.")
     }
-    formula <- stats::as.formula(paste(label, "~", paste(features, collapse = "+")))
+    formula <- stats::as.formula(paste(label, "~", paste(features,
+      collapse = "+"
+    )))
   } else {
     if (missing(label) || missing(features)) {
       f <- formula(data)
@@ -105,7 +109,7 @@ fit_model <- function(formula, data, method, label, features, cv_folds = 5, ...)
     stop(paste("Unknown method:", method))
   )
 
-  
+
   # Return the trained model
   return(model_fit)
 }

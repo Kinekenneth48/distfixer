@@ -7,9 +7,9 @@
 #'  model of class "ranger" when random forest if fitted, "ksvm"
 #'  when support vector regression is fitted, and "gbm.object" when gradient
 #'  boosting machine is fitted.
-#' @param distr A character string that represent the distribution to fit. 
-#' Default is "norm" for normal distribution. See fitdistrplus::fitdist for 
-#' string names for other distributions. 
+#' @param distr A character string that represent the distribution to fit.
+#' Default is "norm" for normal distribution. See fitdistrplus::fitdist for
+#' string names for other distributions.
 #' @param label Response/dependent variable name in the train_data.
 #' @param ... Other arguments to send to the distribution function
 #'  fitdistrplus::fitdist
@@ -20,7 +20,8 @@
 #' @rdname get_error_distribution
 #' @export
 #' @importFrom fitdistrplus fitdist
-get_error_distribution <- function(train_data, fitted_model, distr = "norm", label, ...) {
+get_error_distribution <- function(train_data, fitted_model, distr = "norm",
+                                   label, ...) {
   # get class of model
   model_type <- class(fitted_model)
 

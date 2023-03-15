@@ -30,10 +30,9 @@
 #'  fitdistrplus::fitdist
 #' @rdname boot_sample_all_missing
 #' @importFrom stats sd
-boot_sample_all_missing <- function(test_data,  fitted_model, distr, 
+boot_sample_all_missing <- function(test_data, fitted_model, distr,
                                     mean, sd, nboot, label_convert,
                                     multiplier, ...) {
-
   # get class of model
   model_type <- class(fitted_model)
 
@@ -50,15 +49,15 @@ boot_sample_all_missing <- function(test_data,  fitted_model, distr,
     stop(paste("Unknown method:", model_type))
   )
 
-  #fit the specified distr. to data(dumb function version)
+  # fit the specified distr. to data(dumb function version)
   dumb_distr_model <- fitdist(
     data = predictions, distr = distr
   )
-  
+
   # Initialize a matrix to store the parameters
   params_matrix <- matrix(nrow = nboot, ncol = length(dumb_distr_model$estimate))
   colnames(params_matrix) <- names(dumb_distr_model$estimate)
-  
+
   for (i in 1:nboot) {
     bootstrap_samples <- rnorm(n = nrow(test_data), mean = mean, sd = sd)
 
@@ -84,6 +83,6 @@ boot_sample_all_missing <- function(test_data,  fitted_model, distr,
     params_matrix[i, ] <- distr_model$estimate
   }
 
-  
+
   return(params_matrix)
 }

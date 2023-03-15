@@ -63,11 +63,11 @@ boot_sample_some_missing <- function(test_data, direct_label, indirect_label,
     stop(paste("Unknown method:", model_type))
   )
 
-  #fit the specified distr. to data
+  # fit the specified distr. to data
   dumb_distr_model <- dumb_function(
     test_data_missing = test_data_missing,
-    test_data_not_missing=test_data_not_missing,
-    predictions =predictions, label_convert, multiplier, mean, sd,
+    test_data_not_missing = test_data_not_missing,
+    predictions = predictions, label_convert, multiplier, mean, sd,
     indirect_label, direct_label, distr
   )
 

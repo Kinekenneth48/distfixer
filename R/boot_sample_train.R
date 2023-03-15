@@ -17,10 +17,10 @@
 #' @param sd Standard deviation of model error. Distribution is normal.
 #' @param nboot Number of times to bootstrap the error distribution. This is an
 #'  integer type parameter.
-#' @param label_convert Logical variable indicating that the final 
-#' response/label variable for fitting the distribution should be changed 
-#' from direct_label to the indirect_label. Default is FALSE, where the 
-#' direct_label is considered. If TRUE, the predicted values from the 
+#' @param label_convert Logical variable indicating that the final
+#' response/label variable for fitting the distribution should be changed
+#' from direct_label to the indirect_label. Default is FALSE, where the
+#' direct_label is considered. If TRUE, the predicted values from the
 #' fitted model must be multiplied by the "multiplier" to get the estimated
 #' indirect_label.
 #' @param fit_true An object of class "fitdist".
@@ -32,8 +32,7 @@
 #' @rdname boot_sample_train
 #' @importFrom stats sd
 boot_sample_train <- function(train_data, fitted_model, distr, mean, sd, nboot,
-                              label_convert, multiplier,fit_true, ...) {
-  
+                              label_convert, multiplier, fit_true, ...) {
   # get class of model
   model_type <- class(fitted_model)
 
@@ -53,7 +52,7 @@ boot_sample_train <- function(train_data, fitted_model, distr, mean, sd, nboot,
   # Initialize a matrix to store the parameters
   params_matrix <- matrix(nrow = nboot, ncol = length(fit_true$estimate))
   colnames(params_matrix) <- names(fit_true$estimate)
-  
+
   for (i in 1:nboot) {
     bootstrap_samples <- rnorm(n = nrow(train_data), mean = mean, sd = sd)
 
@@ -75,13 +74,13 @@ boot_sample_train <- function(train_data, fitted_model, distr, mean, sd, nboot,
     distr_model <- fitdist(
       data = as.numeric(new_y_bootstrap), distr = distr
     )
-    
 
-    
+
+
     # Store the parameters in the matrix
     params_matrix[i, ] <- distr_model$estimate
   }
 
-  
+
   return(params_matrix)
 }

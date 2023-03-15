@@ -73,8 +73,6 @@ best_percentile <- function(train_data, direct_label, fitted_model, mean = 0,
                             param_adjust = "sdlog", label_convert = FALSE,
                             multiplier = "snowdepth",
                             indirect_label = "snowload", ...) {
- 
-
   # Fit the specified distribution to the true label
   fit_true <- fit_true(
     train_data, distr, direct_label, label_convert,
@@ -89,13 +87,13 @@ best_percentile <- function(train_data, direct_label, fitted_model, mean = 0,
     train_data, fitted_model, distr, mean, sd, nboot, label_convert, multiplier,
     fit_true
   )
-  
+
   # Find the percentile of the param_adjust that's closest to param_adjust_true
-  closest_param_index <- which.min(abs(params_matrix[, param_adjust] - 
-                                         param_adjust_true))
-  
+  closest_param_index <- which.min(abs(params_matrix[, param_adjust] -
+    param_adjust_true))
+
   closest_param <- params_matrix[closest_param_index, param_adjust]
-  
+
   percentile <- sum(params_matrix[, param_adjust] <= closest_param) / nboot
 
 

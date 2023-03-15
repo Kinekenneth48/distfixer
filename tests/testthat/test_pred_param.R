@@ -2,7 +2,7 @@ testthat::test_that("Test I: pred_param function", {
   set.seed(1232)
   expected <- predict_param(
     test_data = data, label_convert = FALSE,
-    fitted_model = model,param_adjust = "sdlog"
+    fitted_model = model, param_adjust = "sdlog"
   )
   actual <- round(0.3, 1)
   expected <- round(as.numeric(expected[1]), 1)
