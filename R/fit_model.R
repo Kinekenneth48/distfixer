@@ -3,8 +3,8 @@
 # =============================================================================#
 #' @title Fit machine learning model
 #' @description This function allows the user to fit a machine learning model
-#'  which include random forest, support vector regression, and gradient boosting
-#'  machine.
+#'  which include random forest, support vector regression, and 
+#'  gradient boosting machine.
 #' @param formula Object of class character describing the model to fit.
 #' @param data Training data of class data.frame.
 #' @param method Machine learning model to fit. This is a character class type

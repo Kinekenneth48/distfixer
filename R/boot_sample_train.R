@@ -25,7 +25,7 @@
 #' direct_label is considered. If TRUE, the predicted values from the
 #' fitted model must be multiplied by the "multiplier" to get the estimated
 #' indirect_label.
-#' @param fit_true An object of class "fitdist".
+#' @param fit_true_object An object of class "fitdist".
 #' @param multiplier Specify the multiplier column needed to compute the
 #'  indirect_label quantity. Default: "snowdepth".
 #' @param ... Other arguments to send to the distribution function
@@ -33,9 +33,10 @@
 #' @return A matrix of location and scale parameters based on nboot.
 #' @rdname boot_sample_train
 #' @importFrom stats sd
-boot_sample_train <- function(train_data, fitted_model, bounds, distr, 
+boot_sample_train <- function(train_data, fitted_model, bounds, distr,
                               mean, sd, nboot,
-                              label_convert, multiplier, fit_true, ...) {
+                              label_convert, multiplier,
+                              fit_true_object, ...) {
   # get class of model
   model_type <- class(fitted_model)
 
@@ -52,21 +53,23 @@ boot_sample_train <- function(train_data, fitted_model, bounds, distr,
     stop(paste("Unknown method:", model_type))
   )
 
-  
-  # Initialize a matrix to store the parameters
-  params_matrix <- matrix(nrow = nboot, ncol = length(fit_true$estimate))
-  colnames(params_matrix) <- names(fit_true$estimate)
 
-  
+  # Initialize a matrix to store the parameters
+  params_matrix <- matrix(nrow = nboot, ncol = length(fit_true_object$estimate))
+  colnames(params_matrix) <- names(fit_true_object$estimate)
+
+
   for (i in 1:nboot) {
     bootstrap_samples <- rnorm(n = nrow(train_data), mean = mean, sd = sd)
 
     # Add the bootstrapped residuals to the full data predictions
-    y_bootstrap <- pmin(pmax(predictions + bootstrap_samples, bounds[1]),
-                        bounds[2])
+    y_bootstrap <- pmin(
+      pmax(predictions + bootstrap_samples, bounds[1]),
+      bounds[2]
+    )
 
     # compute indirect_label if label_convert is TRUE
-    if (label_convert) {
+    if (label_convert == TRUE) {
       new_y_bootstrap <- as.vector(train_data[[multiplier]]) * y_bootstrap
     } else {
       new_y_bootstrap <- y_bootstrap

@@ -36,6 +36,6 @@ fit_true <- function(train_data, distr, direct_label, label_convert,
     )
   }
 
-  #return object
+  # return object
   return(fit)
 }

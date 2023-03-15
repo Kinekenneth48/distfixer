@@ -8,6 +8,10 @@
 #' @param test_data Test data of class data.frame.
 #' @param direct_label Response/dependent/label variable name that is
 #' predicted by the fitted model.
+#' @param direct_label Response/dependent/label variable name that is
+#' predicted by the fitted model.
+#' @param bounds Specify the bounds of the label of interest to ensure
+#'  a cap during the bootstrap process.
 #' @param fitted_model A fitted model from the fit_model function. A fitted
 #'  model of class "ranger" when random forest if fitted, "ksvm"
 #'  when support vector regression is fitted, and "gbm.object" when gradient
@@ -33,7 +37,8 @@
 #' @return A matrix of location and scale parameters based on nboot.
 #' @rdname boot_sample_some_missing
 #' @importFrom stats sd
-boot_sample_some_missing <- function(test_data, direct_label, indirect_label,
+boot_sample_some_missing <- function(test_data, direct_label, bounds,
+                                     indirect_label,
                                      fitted_model, mean, sd, distr,
                                      nboot, label_convert, multiplier, ...) {
   if (label_convert) {
@@ -65,14 +70,13 @@ boot_sample_some_missing <- function(test_data, direct_label, indirect_label,
 
   # fit the specified distr. to data
   dumb_distr_model <- dumb_function(
-    test_data_missing = test_data_missing,
-    test_data_not_missing = test_data_not_missing,
-    predictions = predictions, label_convert, multiplier, mean, sd,
+    test_data_missing, test_data_not_missing, bounds, predictions,
+    label_convert, multiplier, mean, sd,
     indirect_label, direct_label, distr
   )
 
   # Initialize a matrix to store the parameters
-  params_matrix <- matrix(nrow = nboot, ncol = length(dumb_distr_model$estimate))
+  params_matrix <- matrix(nboot, ncol = length(dumb_distr_model$estimate))
   colnames(params_matrix) <- names(dumb_distr_model$estimate)
 
 
@@ -84,9 +88,9 @@ boot_sample_some_missing <- function(test_data, direct_label, indirect_label,
     )
 
     # Add the bootstrapped residuals to the predictions
-    y_bootstrap <- ifelse((as.vector(predictions) + bootstrap_samples) <= 0,
-      as.vector(predictions),
-      (as.vector(predictions) + bootstrap_samples)
+    y_bootstrap <- pmin(
+      pmax(predictions + bootstrap_samples, bounds[1]),
+      bounds[2]
     )
 
     # compute swe if snowload is TRUE

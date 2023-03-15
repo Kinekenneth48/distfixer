@@ -7,6 +7,7 @@
 best_percentile(
   train_data,
   direct_label,
+  bounds = c(-Inf, Inf),
   fitted_model,
   mean = 0,
   sd = 1,
@@ -24,6 +25,9 @@ best_percentile(
 
 \item{direct_label}{Response/dependent/label variable name that is
 predicted by the fitted model.}
+
+\item{bounds}{Specify the bounds of the label of interest to ensure
+a cap during the bootstrap process.}
 
 \item{fitted_model}{A fitted model from the fit_model function. A fitted
 model of class "ranger" when random forest if fitted, "ksvm"

@@ -7,6 +7,7 @@
 dumb_function(
   test_data_missing,
   test_data_not_missing,
+  bounds,
   predictions,
   test_data,
   label_convert,
@@ -23,6 +24,9 @@ dumb_function(
 \item{test_data_missing}{Test data with missing values for label.}
 
 \item{test_data_not_missing}{Test data without missing values for label.}
+
+\item{bounds}{Specify the bounds of the label of interest to ensure
+a cap during the bootstrap process.}
 
 \item{predictions}{Prediction values made for the missing label values.}
 

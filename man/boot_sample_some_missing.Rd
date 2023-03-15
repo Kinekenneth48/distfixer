@@ -7,6 +7,7 @@
 boot_sample_some_missing(
   test_data,
   direct_label,
+  bounds,
   indirect_label,
   fitted_model,
   mean,
@@ -23,6 +24,9 @@ boot_sample_some_missing(
 
 \item{direct_label}{Response/dependent/label variable name that is
 predicted by the fitted model.}
+
+\item{bounds}{Specify the bounds of the label of interest to ensure
+a cap during the bootstrap process.}
 
 \item{indirect_label}{Specify the actual indirect_label column name needed
 for computing the true parameter values. Default: "snowload".}

@@ -7,10 +7,11 @@
 predict_param(
   test_data,
   direct_label,
+  bounds = c(-Inf, Inf),
   fitted_model,
   distr = "lnorm",
   label_convert = FALSE,
-  all.missing = TRUE,
+  all_missing = TRUE,
   multiplier = "snowdepth",
   indirect_label = "snowload",
   param_adjust = "sdlog",
@@ -26,6 +27,9 @@ predict_param(
 
 \item{direct_label}{Response/dependent/label variable name that is
 predicted by the fitted model.}
+
+\item{bounds}{Specify the bounds of the label of interest to ensure
+a cap during the bootstrap process.}
 
 \item{fitted_model}{A fitted model from the fit_model function. A fitted
 model of class "ranger" when random forest if fitted, "ksvm"
@@ -43,7 +47,7 @@ direct_label is considered. If TRUE, the predicted values from the
 fitted model must be multiplied by the "multiplier" to get the estimated
 indirect_label.}
 
-\item{all.missing}{Logical variable indicating whether the all or some
+\item{all_missing}{Logical variable indicating whether the all or some
 of the response variable is missing. Default: TRUE}
 
 \item{multiplier}{Specify the multiplier column needed to compute the

@@ -83,18 +83,20 @@ best_percentile <- function(train_data, direct_label,
   }
 
   # Fit the specified distribution to the true label
-  fit_true <- fit_true(
+  fit_true_object <- fit_true(
     train_data, distr, direct_label, label_convert,
     indirect_label
   )
 
   # Get the estimated param_adjust of the true data
-  param_adjust_true <- fit_true$estimate[[param_adjust]]
+  param_adjust_true <- fit_true_object$estimate[[param_adjust]]
 
   # compute the bootstrap of parameters
   params_matrix <- boot_sample_train(
-    train_data, fitted_model, distr, mean, sd, nboot, label_convert, multiplier,
-    fit_true
+    train_data = train_data, fitted_model = fitted_model, distr = distr,
+    mean = mean, sd = sd,
+    nboot = nboot, label_convert = label_convert, multiplier = multiplier,
+    fit_true_object = fit_true_object, bounds = bounds
   )
 
   # Find the percentile of the param_adjust that's closest to param_adjust_true

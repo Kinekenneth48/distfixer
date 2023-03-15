@@ -3,6 +3,8 @@
 #' @param test_data Test data of class data.frame.
 #' @param test_data_missing Test data with missing values for label.
 #' @param test_data_not_missing Test data without missing values for label.
+#' @param bounds Specify the bounds of the label of interest to ensure
+#'  a cap during the bootstrap process.
 #' @param predictions Prediction values made for the missing label values.
 #' @param label_convert Logical variable indicating that the final
 #' response/label variable for fitting the distribution should be changed
@@ -25,7 +27,7 @@
 #' @return fitted distr. object
 #' @rdname dumb_function
 
-dumb_function <- function(test_data_missing, test_data_not_missing,
+dumb_function <- function(test_data_missing, test_data_not_missing, bounds,
                           predictions, test_data,
                           label_convert, multiplier, mean, sd,
                           indirect_label, direct_label,
@@ -36,9 +38,9 @@ dumb_function <- function(test_data_missing, test_data_not_missing,
   )
 
   # Add the bootstrapped residuals to the predictions
-  y_bootstrap <- ifelse((as.vector(predictions) + bootstrap_samples) <= 0,
-    as.vector(predictions),
-    (as.vector(predictions) + bootstrap_samples)
+  y_bootstrap <- pmin(
+    pmax(predictions + bootstrap_samples, bounds[1]),
+    bounds[2]
   )
 
   # compute swe if snowload is TRUE

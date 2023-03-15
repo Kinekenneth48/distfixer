@@ -7,13 +7,14 @@
 boot_sample_train(
   train_data,
   fitted_model,
+  bounds,
   distr,
   mean,
   sd,
   nboot,
   label_convert,
   multiplier,
-  fit_true,
+  fit_true_object,
   ...
 )
 }
@@ -24,6 +25,9 @@ boot_sample_train(
 model of class "ranger" when random forest if fitted, "ksvm"
 when support vector regression is fitted, and "gbm.object" when gradient
 boosting machine is fitted.}
+
+\item{bounds}{Specify the bounds of the label of interest to ensure
+a cap during the bootstrap process.}
 
 \item{distr}{A character string that represent the distribution to fit for
 the label/response. Default is "norm" for normal distribution.
@@ -46,7 +50,7 @@ indirect_label.}
 \item{multiplier}{Specify the multiplier column needed to compute the
 indirect_label quantity. Default: "snowdepth".}
 
-\item{fit_true}{An object of class "fitdist".}
+\item{fit_true_object}{An object of class "fitdist".}
 
 \item{...}{Other arguments to send to the distribution function
 fitdistrplus::fitdist}

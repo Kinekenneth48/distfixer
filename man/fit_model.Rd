@@ -27,7 +27,8 @@ support vector regression, and "gbm" - gradient boosting machine.}
 
 \item{...}{other parameters to pass to the model fitting function
 "ranger::ranger" for random forest, "kernlab::ksvm" for support vector
-regression, and "gbm::gbm" for gradient boosting machine.}
+regression, and "gbm::gbm" for gradient boosting machine. Tuned
+hyper-parameters can be passed here to override default parameters.}
 }
 \value{
 A fitted model of class "ranger" when random forest if fitted, "ksvm"
@@ -36,8 +37,8 @@ boosting machine is fitted.
 }
 \description{
 This function allows the user to fit a machine learning model
-which include random forest, support vector regression, and gradient boosting
-machine.
+which include random forest, support vector regression, and
+gradient boosting machine.
 }
 \examples{
 \dontrun{

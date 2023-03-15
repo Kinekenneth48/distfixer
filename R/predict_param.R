@@ -11,10 +11,12 @@
 #'  boosting machine is fitted.
 #' @param direct_label Response/dependent/label variable name that is
 #' predicted by the fitted model.
+#' @param bounds Specify the bounds of the label of interest to ensure
+#'  a cap during the bootstrap process.
 #' @param distr A character string that represent the distribution to fit for
 #'  the label/response. Default is "lnorm" for normal distribution.
 #'  See fitdistrplus::fitdist for string names for other distributions.
-#' @param all.missing Logical variable indicating whether the all or some
+#' @param all_missing Logical variable indicating whether the all or some
 #' of the response variable is missing. Default: TRUE
 #' @param label_convert Logical variable indicating that the final
 #' response/label variable for fitting the distribution should be changed
@@ -43,21 +45,33 @@
 #' @rdname predict_param
 #' @export
 #' @importFrom stats rnorm quantile predict
-predict_param <- function(test_data, direct_label, fitted_model, distr = "lnorm",
-                          label_convert = FALSE, all.missing = TRUE,
+predict_param <- function(test_data, direct_label, bounds = c(-Inf, Inf),
+                          fitted_model, distr = "lnorm",
+                          label_convert = FALSE, all_missing = TRUE,
                           multiplier = "snowdepth", indirect_label = "snowload",
                           param_adjust = "sdlog",
                           mean = 0, sd = 1, percentile = 0.9,
                           nboot = 200, ...) {
-  if (all.missing) {
+  # error statement
+  if (bounds[1] >= bounds[2]) {
+    stop("Error: The lower bound must be less than the upper bound.")
+  }
+
+  if (all_missing) {
     # compute the bootstrap of parameters
     params_matrix <- boot_sample_all_missing(
-      test_data, fitted_model, distr, mean, sd, nboot, label_convert, multiplier
+      test_data = test_data, fitted_model = fitted_model, bounds = bounds,
+      distr = distr, mean = mean, sd = sd, nboot = nboot,
+      label_convert = label_convert, multiplier = multiplier
     )
   } else {
     params_matrix <- boot_sample_some_missing(
-      test_data, direct_label, indirect_label, fitted_model, mean, sd, distr,
-      nboot, label_convert, multiplier
+      test_data = test_data, direct_label = direct_label,
+      bounds = bounds, indirect_label = indirect_label,
+      fitted_model = fitted_model,
+      mean = mean, sd = sd, distr = distr,
+      nboot = nboot, label_convert = label_convert,
+      multiplier = multiplier
     )
   }
 

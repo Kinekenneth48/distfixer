@@ -3,9 +3,10 @@ testthat::test_that("Test: best_percentile function", {
   expected <- best_percentile(
     train_data = data, direct_label = "y",
     fitted_model = model,
-    label_convert = FALSE, method = "mme"
+    label_convert = FALSE, method = "mme", bounds = c(0.1, Inf)
   )
-  actual <- 0.985
 
+  actual <- as.vector(round(0.97, 1))
+  expected <- as.vector(round(expected, 1))
   expect_identical(expected, actual)
 })

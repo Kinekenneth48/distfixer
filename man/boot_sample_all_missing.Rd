@@ -7,6 +7,7 @@
 boot_sample_all_missing(
   test_data,
   fitted_model,
+  bounds,
   distr,
   mean,
   sd,
@@ -23,6 +24,9 @@ boot_sample_all_missing(
 model of class "ranger" when random forest if fitted, "ksvm"
 when support vector regression is fitted, and "gbm.object" when gradient
 boosting machine is fitted.}
+
+\item{bounds}{Specify the bounds of the label of interest to ensure
+a cap during the bootstrap process.}
 
 \item{distr}{A character string that represent the distribution to fit for
 the label/response. Default is "lnorm" for normal distribution.
