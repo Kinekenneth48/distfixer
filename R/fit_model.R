@@ -19,7 +19,8 @@
 #'   support vector regression, and "gbm" - gradient boosting machine.
 #' @param ... other parameters to pass to the model fitting function
 #' "ranger::ranger" for random forest, "kernlab::ksvm" for support vector
-#' regression, and "gbm::gbm" for gradient boosting machine.
+#' regression, and "gbm::gbm" for gradient boosting machine. Tuned 
+#' hyper-parameters can be passed here to override default parameters.
 #' @return A fitted model of class "ranger" when random forest if fitted, "ksvm"
 #'  when support vector regression is fitted, and "gbm.object" when gradient
 #'  boosting machine is fitted.
@@ -104,8 +105,7 @@ fit_model <- function(formula, data, method, label, features, cv_folds = 5, ...)
     stop(paste("Unknown method:", method))
   )
 
-
-
+  
   # Return the trained model
   return(model_fit)
 }
