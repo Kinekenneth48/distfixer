@@ -10,6 +10,8 @@
 #' @param train_data Training data of class data.frame.
 #' @param direct_label Response/dependent/label variable name that is
 #' predicted by the fitted model.
+#' @param bounds Specify the bounds of the label of interest to ensure
+#'  a cap during the bootstrap process.
 #' @param fitted_model A fitted model from the fit_model function. A fitted
 #'  model of class "ranger" when random forest if fitted, "ksvm"
 #'  when support vector regression is fitted, and "gbm.object" when gradient
@@ -68,11 +70,18 @@
 #' @importFrom stats rnorm quantile predict
 
 
-best_percentile <- function(train_data, direct_label, fitted_model, mean = 0,
+best_percentile <- function(train_data, direct_label,
+                            bounds = c(-Inf, Inf),
+                            fitted_model, mean = 0,
                             sd = 1, nboot = 200, distr = "lnorm",
                             param_adjust = "sdlog", label_convert = FALSE,
                             multiplier = "snowdepth",
                             indirect_label = "snowload", ...) {
+  # error statement
+  if (bounds[1] >= bounds[2]) {
+    stop("Error: The lower bound must be less than the upper bound.")
+  }
+
   # Fit the specified distribution to the true label
   fit_true <- fit_true(
     train_data, distr, direct_label, label_convert,

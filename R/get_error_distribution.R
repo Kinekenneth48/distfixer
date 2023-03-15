@@ -1,4 +1,6 @@
-
+# =============================================================================#
+# get_error_distribution function(external) declaration
+# =============================================================================#
 #' @title Error distribution
 #' @description This function fits the residuals of the training data to a
 #'  normal distribution and returns the distribution parameters.

@@ -10,6 +10,8 @@
 #'  model of class "ranger" when random forest if fitted, "ksvm"
 #'  when support vector regression is fitted, and "gbm.object" when gradient
 #'  boosting machine is fitted.
+#' @param bounds Specify the bounds of the label of interest to ensure
+#'  a cap during the bootstrap process.
 #' @param distr A character string that represent the distribution to fit for
 #'  the label/response. Default is "norm" for normal distribution.
 #'  See fitdistrplus::fitdist for string names for other distributions.
@@ -31,7 +33,8 @@
 #' @return A matrix of location and scale parameters based on nboot.
 #' @rdname boot_sample_train
 #' @importFrom stats sd
-boot_sample_train <- function(train_data, fitted_model, distr, mean, sd, nboot,
+boot_sample_train <- function(train_data, fitted_model, bounds, distr, 
+                              mean, sd, nboot,
                               label_convert, multiplier, fit_true, ...) {
   # get class of model
   model_type <- class(fitted_model)
@@ -49,19 +52,18 @@ boot_sample_train <- function(train_data, fitted_model, distr, mean, sd, nboot,
     stop(paste("Unknown method:", model_type))
   )
 
+  
   # Initialize a matrix to store the parameters
   params_matrix <- matrix(nrow = nboot, ncol = length(fit_true$estimate))
   colnames(params_matrix) <- names(fit_true$estimate)
 
+  
   for (i in 1:nboot) {
     bootstrap_samples <- rnorm(n = nrow(train_data), mean = mean, sd = sd)
 
     # Add the bootstrapped residuals to the full data predictions
-    y_bootstrap <- ifelse(
-      (predictions + bootstrap_samples) <= 0,
-      predictions,
-      (predictions + bootstrap_samples)
-    )
+    y_bootstrap <- pmin(pmax(predictions + bootstrap_samples, bounds[1]),
+                        bounds[2])
 
     # compute indirect_label if label_convert is TRUE
     if (label_convert) {
